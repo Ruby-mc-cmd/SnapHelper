@@ -1,0 +1,12 @@
+{
+	"required": true,
+	"package": "com.ruby.mixin.client",
+	"compatibilityLevel": "JAVA_21",
+	"client": [
+		"ScreenshotRecorderMixin",
+		"PauseScreenMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
