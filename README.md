@@ -12,3 +12,7 @@ Minecraft のスクリーンショット通知に **Open / File / Copy / Path** 
 - Minecraft: **1.21.11**
 - Fabric Loader: **0.18.x+**
 - Fabric API: **Required**
+
+## Modrinth
+
+- https://modrinth.com/mod/snaphelper
