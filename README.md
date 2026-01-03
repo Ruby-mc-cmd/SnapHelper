@@ -7,6 +7,11 @@ Fabric 向けのクライアントサイド MODで、
 Minecraft のスクリーンショット通知に **Open / File / Copy / Path** などの  
 インタラクティブなボタンを追加します。
 
+## Update log
+
+- 1.1.0 ホバーテキストを追加
+- 1.0.0 リリース
+
 ## Versions
 
 - Minecraft: **1.21.11**
