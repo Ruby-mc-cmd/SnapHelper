@@ -1,5 +1,8 @@
 {
   "snaphelper.screenshot.description": "Adds copy and open buttons to screenshot notifications!",
   "snaphelper.screenshot.saved": "Screenshot saved!",
-  "snaphelper.open_folder": "Open screenshots folder"
+  "snaphelper.hovertext.open": "Open with default application",
+  "snaphelper.hovertext.file": "Open screenshots folder",
+  "snaphelper.hovertext.copy": "Copy the image to clipboard",
+  "snaphelper.hovertext.path": "Copy the file path"
 }

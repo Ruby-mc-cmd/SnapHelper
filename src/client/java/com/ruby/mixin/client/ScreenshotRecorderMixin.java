@@ -4,11 +4,14 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
 import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
+import java.awt.*;
 import java.io.File;
 import java.util.function.Consumer;
 
@@ -76,6 +79,11 @@ public class ScreenshotRecorderMixin {
 											.withClickEvent(
 													new ClickEvent.OpenFile(latest)
 											)
+											.withHoverEvent(
+													new HoverEvent.ShowText(
+															Component.translatable("snaphelper.hovertext.open")
+													)
+											)
 									)
 					);
 
@@ -88,6 +96,11 @@ public class ScreenshotRecorderMixin {
 											.withBold(true)
 											.withClickEvent(
 													new ClickEvent.OpenFile(latest.getParent())
+											)
+											.withHoverEvent(
+													new HoverEvent.ShowText(
+															Component.translatable("snaphelper.hovertext.file")
+													)
 											)
 									)
 					);
@@ -104,6 +117,11 @@ public class ScreenshotRecorderMixin {
 															"/snaphelper:copy_image " + latest.getAbsolutePath()
 													)
 											)
+											.withHoverEvent(
+													new HoverEvent.ShowText(
+															Component.translatable("snaphelper.hovertext.copy")
+													)
+											)
 									)
 					);
 
@@ -117,6 +135,11 @@ public class ScreenshotRecorderMixin {
 											.withClickEvent(
 													new ClickEvent.CopyToClipboard(
 															latest.getAbsolutePath()
+													)
+											)
+											.withHoverEvent(
+													new HoverEvent.ShowText(
+															Component.translatable("snaphelper.hovertext.path")
 													)
 											)
 									)

@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"id": "snaphelper",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"name": "SnapHelper",
 	"description": "Adds copy and open buttons to screenshot notifications!",
 	"authors": [
@@ -13,11 +13,8 @@
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/snaphelper/icon.png",
-	"environment": "*",
+	"environment": "client",
 	"entrypoints": {
-		"main": [
-			"com.ruby.SnapHelper"
-		],
 		"client": [
 			"com.ruby.SnapHelperClient"
 		]

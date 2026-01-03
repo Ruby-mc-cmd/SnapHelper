@@ -35,16 +35,21 @@ public abstract class PauseScreenMixin extends Screen {
                                 .withStyle(Style.EMPTY
                                         .withFont(new FontDescription.Resource(
                                                 Identifier.parse("snaphelper:char")
-
-
-                                        ))),
-                        button -> openScreenshotFolder()
-                ).bounds(
-                        baseX + 200 + 4,
-                        baseY - 16,
-                        20,
-                        20
-                ).build()
+                                                )
+                                        )
+                                ),
+                                button -> openScreenshotFolder()
+                        )
+                        .tooltip(
+                                net.minecraft.client.gui.components.Tooltip.create(
+                                        Component.translatable("snaphelper.hovertext.file")
+                                )
+                        )
+                        .bounds(
+                                baseX + 200 + 4, baseY - 16,
+                                20, 20
+                        ).
+                        build()
         );
     }
 

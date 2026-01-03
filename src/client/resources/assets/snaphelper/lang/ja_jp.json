@@ -1,5 +1,8 @@
 {
   "snaphelper.screenshot.description": "スクリーンショット通知にコピーやフォルダを開くボタンを追加します！",
   "snaphelper.screenshot.saved": "スクリーンショットを保存しました！",
-  "snaphelper.open_folder": "スクリーンショットフォルダを開く"
+  "snaphelper.hovertext.open": "既定のアプリケーションで開く",
+  "snaphelper.hovertext.file": "スクリーンショットのフォルダを開く",
+  "snaphelper.hovertext.copy": "画像をクリップボードにコピー",
+  "snaphelper.hovertext.path": "ファイルパスをコピー"
 }
