@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-import java.awt.*;
 import java.io.File;
 import java.util.function.Consumer;
 
@@ -57,10 +56,9 @@ public class ScreenshotRecorderMixin {
 							Component.literal("\uE000")
 									.withStyle(Style.EMPTY
 											.withFont(new FontDescription.Resource(
-													Identifier.parse("snaphelper:char")
-
-
-											))
+															Identifier.parse("snaphelper:char")
+													)
+											)
 											.withUnderlined(true)
 											.withBold(false)
 											.withClickEvent(
@@ -145,7 +143,6 @@ public class ScreenshotRecorderMixin {
 									)
 					);
 				}
-
 				mc.gui.getChat().addMessage(line);
 			});
 		};
