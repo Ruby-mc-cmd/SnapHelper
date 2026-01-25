@@ -30,18 +30,53 @@ public class SnapHelperClient implements ClientModInitializer {
 	private int copyScreenshotByPath(CommandContext<?> ctx) {
 		Minecraft mc = Minecraft.getInstance();
 
-		String path = StringArgumentType.getString(ctx, "path");
-		File image = new File(path);
+		String rawPath = StringArgumentType.getString(ctx, "path");
 
+		File image = new File(rawPath).getAbsoluteFile();
+
+		// ================================
+		// ファイル判定
+		// ================================
 		if (!image.exists() || !image.isFile()) {
-			mc.gui.getChat().addMessage(
-					Component.literal("❌ ファイルが存在しません")
-			);
+			mc.gui.getChat().addMessage(Component.literal("❌ ファイルが存在しません"));
+			return 0;
+		}
+
+		try {
+			// ================================
+			// canonical化
+			// ================================
+			File canonicalImage = image.getCanonicalFile();
+			File screenshotsDir = new File(mc.gameDirectory, "screenshots").getCanonicalFile();
+
+			// ================================
+			// screenshots配下のみ許可
+			// ================================
+			if (!canonicalImage.toPath().startsWith(screenshotsDir.toPath())) {
+				mc.gui.getChat().addMessage(Component.literal("❌ screenshots フォルダ配下のみ使用できます"));
+				return 0;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			mc.gui.getChat().addMessage(Component.literal("❌ パス判定でエラーが発生しました"));
+			return 0;
+		}
+
+		// ================================
+		// 拡張子チェック
+		// ================================
+		String lower = image.getName().toLowerCase(Locale.ROOT);
+		if (!(lower.endsWith(".png") || lower.endsWith(".jpg") || lower.endsWith(".jpeg"))) {
+			mc.gui.getChat().addMessage(Component.literal("❌ 対応形式は png / jpg のみです"));
 			return 0;
 		}
 
 		boolean success;
 
+		// ================================
+		// OS 判定
+		// ================================
 		if (isWindows()) {
 			success = copyImageWindows(image);
 		} else if (isMac()) {
@@ -49,28 +84,18 @@ public class SnapHelperClient implements ClientModInitializer {
 		} else if (isLinux()) {
 			success = copyImageLinux(image);
 		} else {
-			mc.gui.getChat().addMessage(
-					Component.literal("❌ 未対応のOSです")
-			);
+			mc.gui.getChat().addMessage(Component.literal("❌ 未対応のOSです"));
 			return 0;
 		}
 
 		if (!success) {
-			mc.gui.getChat().addMessage(
-					Component.literal("❌ クリップボードへのコピーに失敗しました")
-			);
+			mc.gui.getChat().addMessage(Component.literal("❌ クリップボードへのコピーに失敗しました"));
 			return 0;
 		}
-
-		// 成功メッセージ
-		// mc.gui.getChat().addMessage(Component.literal("📋 画像をコピーしました"));
 
 		return 1;
 	}
 
-	// =========================
-	// OS 判定
-	// =========================
 	private static boolean isWindows() {
 		return osName().contains("win");
 	}
@@ -96,7 +121,9 @@ public class SnapHelperClient implements ClientModInitializer {
 					"powershell",
 					"-NoProfile",
 					"-Command",
-					"Set-Clipboard -Path \"" + image.getAbsolutePath() + "\""
+					"Set-Clipboard",
+					"-Path",
+					image.getAbsolutePath()
 			).start();
 
 			return process.waitFor() == 0;
@@ -111,12 +138,12 @@ public class SnapHelperClient implements ClientModInitializer {
 	// =========================
 	private static boolean copyImageMac(File image) {
 		try {
+			String path = image.getAbsolutePath().replace("\"", "\\\"");
+
 			Process process = new ProcessBuilder(
 					"osascript",
 					"-e",
-					"set the clipboard to (read (POSIX file \"" +
-							image.getAbsolutePath() +
-							"\") as TIFF)"
+					"set the clipboard to (read (POSIX file \"" + path + "\") as TIFF)"
 			).start();
 
 			return process.waitFor() == 0;
@@ -127,11 +154,10 @@ public class SnapHelperClient implements ClientModInitializer {
 	}
 
 	// =========================
-	// Linux (Wayland / X11)
+	// Linux
 	// =========================
 	private static boolean copyImageLinux(File image) {
 		try {
-			// Wayland 判定
 			if (System.getenv("WAYLAND_DISPLAY") != null) {
 				return runProcess(
 						"wl-copy",
@@ -141,7 +167,6 @@ public class SnapHelperClient implements ClientModInitializer {
 				);
 			}
 
-			// X11 判定
 			if (System.getenv("DISPLAY") != null) {
 				return runProcess(
 						"xclip",
