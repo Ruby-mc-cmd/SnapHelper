@@ -2,14 +2,13 @@ package com.ruby;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import com.ruby.mixin.client.ImageSelection;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Locale;
@@ -21,6 +20,8 @@ public class SnapHelperClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+		System.setProperty("java.awt.headless", "false");
+
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
 			dispatcher.register(
 					literal("snaphelper:copy_image")
@@ -35,7 +36,6 @@ public class SnapHelperClient implements ClientModInitializer {
 		Minecraft mc = Minecraft.getInstance();
 
 		String rawPath = StringArgumentType.getString(ctx, "path");
-
 		File image = new File(rawPath).getAbsoluteFile();
 
 		// ================================
@@ -54,7 +54,7 @@ public class SnapHelperClient implements ClientModInitializer {
 			File screenshotsDir = new File(mc.gameDirectory, "screenshots").getCanonicalFile();
 
 			// ================================
-			// screenshots配下のみ許可
+			// screenshots 配下のみ許可
 			// ================================
 			if (!canonicalImage.toPath().startsWith(screenshotsDir.toPath())) {
 				mc.gui.getChat().addMessage(Component.literal("❌ screenshots フォルダ配下のみ使用できます"));
@@ -76,31 +76,34 @@ public class SnapHelperClient implements ClientModInitializer {
 			return 0;
 		}
 
-        // ================================
-        // 処理を共通化
-        // ================================
-        if (copyImageNative(image)) {
-            return 1;
-        } else {
-            mc.gui.getChat().addMessage(Component.literal("❌ クリップボードへのコピーに失敗しました"));
-            return 0;
-        }
-    }
+		// ================================
+		// コピー処理
+		// ================================
+		if (copyImageNative(image)) {
+			// mc.gui.getChat().addMessage(Component.literal("📋 クリップボードにコピーしました"));
+			return 1;
+		} else {
+			mc.gui.getChat().addMessage(Component.literal("❌ クリップボードへのコピーに失敗しました"));
+			return 0;
+		}
+	}
 
-    // ================================
-    // AWT APIを使用して画像をクリップボードにコピー
-    // ================================
-    private boolean copyImageNative(File imageFile) {
-        try {
-            BufferedImage image = ImageIO.read(imageFile);
-            if (image == null) return false;
+	// ================================
+	// AWT APIを使用して画像をクリップボードにコピー
+	// ================================
+	private boolean copyImageNative(File imageFile) {
+		try {
+			BufferedImage image = ImageIO.read(imageFile);
+			if (image == null) return false;
 
-            ImageSelection selection = new ImageSelection(image);
-            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+			ImageSelection selection = new ImageSelection(image);
+
+			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+			return true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

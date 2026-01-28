@@ -1,4 +1,4 @@
-package com.ruby.mixin.client;
+package com.ruby;
 
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;

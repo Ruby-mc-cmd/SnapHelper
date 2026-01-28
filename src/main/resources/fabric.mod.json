@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"id": "snaphelper",
-	"version": "1.2.1",
+	"version": "1.2.2",
 	"name": "SnapHelper",
 	"description": "Adds copy and open buttons to screenshot notifications!",
 	"authors": [
