@@ -9,6 +9,8 @@ Minecraft のスクリーンショット通知に **Open / File / Copy / Path** 
 
 ## Update log
 
+- 1.2.2 外部コマンドに依存しない内部実装へ変更
+  （PR by [@hikoma0000](https://github.com/hikoma0000)）
 - 1.2.1 OSコマンドインジェクションの対策
 - 1.2.0 Fabrishotに対応
 - 1.1.1 アイコンのディレクトリを修正
